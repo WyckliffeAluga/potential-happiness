@@ -211,7 +211,7 @@ class Car() :
         optimizer= adam(lr=1e-3)
         model.compile(loss='mse', optimizer=optimizer)
         
-        model.fit_generator(self.batchGenerator(100, 1), 
+        model.fit(self.batchGenerator(100, 1), 
                             steps_per_epoch=300, epochs=10, 
                             validation_data= self.batchGenerator(100, 0), 
                             validation_steps=200, verbose=1, shuffle=1)

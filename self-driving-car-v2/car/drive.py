@@ -19,7 +19,7 @@ import cv2
 sio = socketio.Server() # real time communication between client and server 
  
 app = Flask(__name__) #'__main__'
-speed_limit = 10
+speed_limit = 5
 
 def img_preprocess(img):
     img = img[60:135,:,:]
@@ -57,6 +57,6 @@ def send_control(steering_angle, throttle):
  
  
 if __name__ == '__main__':
-    model = tf.keras.models.load_model('carModel.h5')
+    model = tf.keras.models.load_model('Model.h5')
     app = socketio.Middleware(sio, app)
     eventlet.wsgi.server(eventlet.listen(('', 4567)), app)

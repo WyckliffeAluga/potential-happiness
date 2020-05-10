@@ -14,8 +14,14 @@ import torch.optim as optim
 from torch.autograd import Variable
 
 # import the packages for OpenAI and DOOM 
-import gym 
+import gym
+import gym_pull
+from gym.wrappers.monitoring import load_results
+gym_pull.pull('github.com/ppaquette/gym-doom')        # Only required once, envs will be loaded with import gym_pull afterwards
+env = gym.make('ppaquette/DoomBasic-v0')
+
 from gym.wrappers import  SkipWrapper
+
 from ppaquatte_gym_doom.wrappers.action_space import ToDiscrete
 
 # import the internal files 

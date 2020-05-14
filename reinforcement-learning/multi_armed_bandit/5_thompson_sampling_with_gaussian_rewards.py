@@ -66,8 +66,8 @@ def experiment():
         # thomspon sampling 
         j = np.argmax([b.sample() for b in bandits])
         # plot the posterios 
-      #  for i in sample_points : 
-          #  plot(bandits, i)
+        for i in sample_points : 
+            plot(bandits, i)
             
         # pull the arm 
         x = bandits[j].pull() 

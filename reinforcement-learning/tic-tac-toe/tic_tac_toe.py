@@ -5,17 +5,12 @@ Created on Wed May 13 21:51:20 2020
 @author: wyckliffe
 """
 
-import sys
+
 import numpy as np
 
 length = 3
 
-try:
-    # Python 2
-    xrange
-except NameError:
-    # Python 3, xrange is now named range
-    xrange = range
+
 
 class Environment:
     
@@ -34,7 +29,7 @@ class Environment:
     
     def reward(self, sym): 
         
-        # no reward unitl game is over 
+        # no reward until game is over 
         if not self.game_over(): 
             return 0 
         
@@ -52,8 +47,8 @@ class Environment:
         k = 0 
         h = 0 
         
-        for i in xrange(length): 
-            for j in xrange(length): 
+        for i in range(length): 
+            for j in range(length): 
                 if self.board[i, j] == 0 :
                     v = 0 
                 elif self.board[i, j] == self.x :
@@ -63,7 +58,7 @@ class Environment:
                 
                 h += (3 ** k )  * v 
                 k += 1 
-            return h 
+        return h 
         
     def game_over(self, force_recalculate=False) : 
         
@@ -71,7 +66,7 @@ class Environment:
             return self.ended 
         
         # check rows
-        for i in xrange(length): 
+        for i in range(length): 
             for player in (self.x , self.o): 
                 if self.board[i].sum() == player * length : 
                     self.winner = player 
@@ -80,7 +75,7 @@ class Environment:
                 
         
         # check columns 
-        for j in xrange(length) :
+        for j in range(length) :
             for player in (self.x , self.o) : 
                 if self.board[:,j].sum() == player * length : 
                     self.winner = player 
@@ -113,21 +108,24 @@ class Environment:
         self.winner = None 
         return False 
     
+    def is_draw(self): 
+        
+        return self.ended and self.winner is None
+    
     def draw_board(self): 
         
-        for i in xrange(length): 
-            print("........................")
-            for j in xrange(length): 
-                print(" ")
-                
-                if self.board[i,j] == self.x : 
-                    print ("x")
-                if self.board[i,j] == self.o : 
-                    print("o")
-                else: 
-                    print(" ")
+        for i in range(length):
+            print("-------------")
+            for j in range(length):
+                print("  ", end="")
+                if self.board[i,j] == self.x:
+                    print("x ", end="")
+                elif self.board[i,j] == self.o:
+                    print("o ", end="")
+                else:
+                    print("  ", end="")
             print("")
-        print("........................")
+        print("-------------")
     
                 
 
@@ -150,7 +148,7 @@ class Agent:
         # if true , will print values ofr each position on the board 
         self.verbose = v 
         
-    def reset_history(self, v): 
+    def reset_history(self): 
         self.state_history = [] 
         
     def take_action(self, env): 
@@ -166,8 +164,8 @@ class Agent:
                 
             possible_moves = [] 
             
-            for i in xrange(length): 
-                for j in xrange(length): 
+            for i in range(length): 
+                for j in range(length): 
                     if env.is_empty(i, j): 
                         possible_moves.append((i,j))
             
@@ -175,12 +173,15 @@ class Agent:
             next_move = possible_moves[idx]
             
         else: 
+            # choose actions based on current values of states
+            # loop through all possible moves, get their values 
+            # keep trakc of the best value
             pos2value = {}
             next_move = None 
             best_value = -1 
             
-            for i in xrange(length): 
-                for j in xrange(length): 
+            for i in range(length): 
+                for j in range(length): 
                     
                     if env.is_empty(i ,j): 
                         # what is the state if we make this move 
@@ -188,32 +189,34 @@ class Agent:
                         state = env.get_state() 
                         env.board[i,j] = 0  # change the board back 
                         pos2value[(i,j)] = self.V[state]
-                    if self.V[state] > best_value : 
-                        best_value = self.V[state]
-                        best_state = state 
-                        next_move = (i, j)
+                        
+                        if self.V[state] > best_value : 
+                            best_value = self.V[state]
+                            best_state = state 
+                            next_move = (i, j)
                         
             # verbose, draw board with values 
             if self.verbose : 
                 print("Taking a greedy action")
-                # print board with values 
-                for i in xrange(length): 
-                    print("---------------------")
-                    for j in xrange(length): 
-                        if env.is_empty(i,j): 
-                            # print the value 
-                            print("%.2f|" % pos2value[(i,j)])
-                        else: 
-                            print(" ")
-                            if env.board[i,j] == env.x : 
-                                print("X |")
-                            elif env.board[i,j] == env.o :
-                                print("o |")
-                            else: 
-                                print(" |")
-                    print("")
-                print("---------------------") 
-    
+                for i in range(length):
+                  print("------------------")
+                  for j in range(length):
+                    if env.is_empty(i, j):
+                      # print the value
+                      print(" %.2f|" % pos2value[(i,j)], end="")
+                    else:
+                      print("  ", end="")
+                      if env.board[i,j] == env.x:
+                        print("x  |", end="")
+                      elif env.board[i,j] == env.o:
+                        print("o  |", end="")
+                      else:
+                        print("   |", end="")
+                  print("")
+                print("------------------")
+      
+        # make the move
+        env.board[next_move[0], next_move[1]] = self.sym
     
     def update_state_history(self, s): 
         
@@ -241,13 +244,13 @@ class Human:
         pass 
     
     def set_symbol(self, sym) : 
-        set.sym = sym 
+        self.sym = sym 
         
     def take_action(self, env): 
         
         while True :
             # break if we maek a legal movve 
-            move = raw_input("Ether cordinates 1 , j for your next move (i, j = 0..2:") 
+            move = input("Enter cordinates 1 , j for your next move (i, j = 0..2:") 
             
             i, j = move.split(',')
             i = int(i)
@@ -389,27 +392,27 @@ if __name__ == "__main__"    :
     Vo = initialV_o(env, state_winner_triples)
     p2.set_v(Vo)
     
-    # give each player as symbol 
+      # give each player their symbol
     p1.set_symbol(env.x)
     p2.set_symbol(env.o)
-    
-    T = 10000 
-    for t in xrange(T): 
-        if t % 200 == 0 : 
+
+    T = 10000
+    for t in range(T):
+        if t % 200 == 0:
             print(t)
         play_game(p1, p2, Environment())
-        
-    # human verification 
-    human = Human() 
+
+      # play human vs. agent
+      # do you think the agent learned to play the game well?
+    human = Human()
     human.set_symbol(env.o)
-    
-    while True : 
+    while True:
         p1.set_verbose(True)
         play_game(p1, human, Environment(), draw=2)
         
-        answer = raw_input("play again? [Y/n]:")
-        if answer and answer.lower()[0] == 'n': 
-            break 
-        
+        answer = input("Play again? [Y/n]: ")
+        if answer and answer.lower()[0] == 'n':
+            break
+
     
         

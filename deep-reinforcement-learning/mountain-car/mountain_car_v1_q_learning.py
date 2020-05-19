@@ -39,10 +39,11 @@ class Transformer:
             ("rbf3", RBFSampler(gamma=1.0, n_components=n_components)),
             ("rbf4", RBFSampler(gamma=0.5, n_components=n_components))
             ])
-        feature_examples = featurizer.fit(scaler.transform(observation_examples))
+        feature_examples = featurizer.fit_transform(scaler.transform(observation_examples))
 
         self.scaler = scaler
         self.featurizer = featurizer
+        self.dimensions = feature_examples.shape[1]
 
     def transform(self, observations) :
         scaled = self.scaler.transform(observations)

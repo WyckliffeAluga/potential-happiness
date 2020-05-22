@@ -56,3 +56,33 @@ After the radiologist reads an imaging study, their radiology report is sent to 
 Pathologists
 
 Pathologists are a type of clinician who work primarily in laboratories. While radiologists are the primary readers of x-rays, CT, and MRI studies, pathologists are the primary readers of microscopy studies. It is their job to interpret findings from all different types of cell-level samples taken from patients such as tumor biopsies and blood smears.
+
+
+Medical Imaging Workflows
+
+
+Picture Archiving and Communication System (PACS)
+
+Every imaging center and hospital have a PACS. These systems allow for all medical imaging to be stored in the hospital's servers and transferred to different departments throughout the hospital.
+
+Diagnostic Imaging
+
+In diagnostic situations, a clinician orders an imaging study because they believe that a disease may be present based on the patient's symptoms. Diagnostic imaging can be performed in emergency settings as well as non-emergency settings.
+
+Screening Imaging
+
+Screening studies are performed on populations of individuals who fall into risk groups for certain diseases. These tend to be diseases that are relatively common, have serious consequences, but also have the potential of being reversed if detected and treated early. For example, individuals who are above a certain age with a long smoking history are candidates for lung cancer screening which is performed using x-rays on an annual basis.
+
+Types of 2D Imaging Algorithms
+
+Classification
+
+The classification algorithm assesses a whole image and returns an output stating whether or not a disease or abnormality is present in an image. These types of algorithms can be used for binary or multi-class classification, where a single algorithm can classify for the presence or absence of multiple types of findings or diseases.
+
+Localization
+
+Localization algorithms are intended to aid radiologists in determining where in an image a particular finding is. These types of algorithms output a set of coordinates that create a bounding box around a section of the image where a particular type of finding is. These types of algorithms can be very useful for drawing radiologists' attention to certain types of findings that are difficult to see on imaging.
+
+Segmentation
+
+Segmentation algorithms return a set of pixels that contain the presence of a particular finding in an image, creating a border around a particular finding that allows for the calculation of its exact area. Segmentation algorithms are typically used to measures the size of particular findings or count the number of findings in an image. They are often used to count cells in microscopy data as well, where each cell in an image is segmented individually.

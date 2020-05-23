@@ -47,6 +47,8 @@ for timestep in range(0, 12 * 30 * 24 * 60):
     next_state, reward, game_over = env.update(direction, energy_ai, int(timestep / (30 * 24 * 60)))
     current_state = next_state
 
+    print("Simulation timestep: {:03d}/{:03d}".format(timestep , 12*30*24*60))
+
 
 print("\n")
 print("Total Energy spent with an AI: {:.0f}".format(env.total_energy_ai))

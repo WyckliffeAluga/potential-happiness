@@ -64,7 +64,7 @@ class Env:
         # update atmospheric temperature
         self.atmospheric_temperature = self.monthly_atmospheric_temperatures[month]
 
-        # get the number of users
+        # update the number of users
         self.current_number_users += np.random.randint(-self.max_update_users, self.max_update_users)
 
         if (self.current_number_users > self.max_number_users) :
@@ -72,6 +72,15 @@ class Env:
 
         elif (self.current_number_users < self.min_number_users):
             self.current_number_users = self.min_number_users
+
+        # update the rate of data transfer
+        self.current_rate_data += np.random.randint(-self.max_update_data, self.max_update_data )
+
+        if (self.current_rate_data > self.max_rate_data) :
+            self.current_rate_data = self.max_rate_data
+
+        elif (self.current_rate_data < self.min_rate_data) :
+            self.current_rate_data = self.min_rate_data
 
 
 

@@ -100,6 +100,22 @@ class Env:
         # update the server temp when no ai
         self.no_ai_temperature += delta_server_temperature
 
+        # get game over !!!!!!!!!
+        if (self.ai_temperature < self.min_temperature):
+            if (self.train == 1) :
+                self.game_over = 1
+            else:
+                self.ai_total_energy += self.optimal_temperature[0] - self.ai_temperature # check this to confirm later (debug point)
+                self.ai_temperature = self.optimal_temperature[0]
+        elif(self.ai_temperature > self.max_temperatue) :
+            if (self.train ==1) :
+                self.game_over = 1
+            else:
+                self.ai_total_energy += self.optimal_temperature[1] - self.ai_temperature
+                self.ai_temperature = self.optimal_temperature[1]
+
+
+
 
 if __name__ == '__main__' :
     e = Env()

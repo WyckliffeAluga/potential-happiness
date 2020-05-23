@@ -82,8 +82,23 @@ class Env:
         elif (self.current_rate_data < self.min_rate_data) :
             self.current_rate_data = self.min_rate_data
 
+        # update intrinsic temperature and compute delta server temperature
+        previous_server_temperature = self.server_temperature
+        self.server_temperature = self.atmospheric_temperature + 1.25 * self.current_number_users + 1.25 * self.current_rate_data
+        delta_server_temperature = self.server_temperature - previous_server_temperature
 
+        # compute the delta of temperature caused by ai
 
+        if (direction == -1) :
+            delta_ai_temperature = - ai_energy
+        elif (direction == 1) :
+            delta_ai_temperature = ai_energy
+
+        # update the server temp caused by ai
+        self.ai_temperature += delta_server_temperature + delta_ai_temperature
+
+        # update the server temp when no ai
+        self.no_ai_temperature += delta_server_temperature
 
 
 if __name__ == '__main__' :

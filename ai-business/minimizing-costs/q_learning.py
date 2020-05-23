@@ -47,3 +47,4 @@ class DQN:
                 targets[i. action] = reward + self.discount * Q_sa
 
 
+        return inputs, targets

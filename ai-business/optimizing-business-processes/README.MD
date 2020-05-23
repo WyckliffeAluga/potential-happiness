@@ -15,3 +15,4 @@ The mission is to build an AI that will always take the shortest route to the to
 priority location, whatever the location it starts from, and having the option to go by an intermediary
 location which is in the top 3 priorities.
 
+

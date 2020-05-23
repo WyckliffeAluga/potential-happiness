@@ -131,6 +131,23 @@ class Env:
 
         return next_state, self.reward, self.game_over
 
+    def reset(self, new_month) :
+
+        self.atmospheric_temperature = self.monthly_atmospheric_temperatures[new_month]
+        self.initial_month = new_month
+        self.current_number_users =  self.initial_number_of_users
+        self.current_rate_data = self.initial_rate_data
+        self.server_temperature = self.atmospheric_temperature + 1.25 * self.current_number_users + 1.25 * self.current_rate_data
+        self.ai_temperature = self.server_temperature
+        self.no_ai_temperature = (self.optimal_temperature[0] + self.optimal_temperature[1]) / 2.0
+        self.ai_total_energy = 0.0
+        self.no_ai_total_energy = 0.0
+        self.reward = 0.0
+        self.game_over = 0
+        self.train = 1
+
+
+
 if __name__ == '__main__' :
     e = Env()
     print((e.monthly_atmospheric_temperatures))

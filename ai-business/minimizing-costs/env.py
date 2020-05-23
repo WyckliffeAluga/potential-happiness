@@ -47,12 +47,12 @@ class Env:
 
         # compute the energy spent by server's cooling system
         no_ai_energy = 0
-        if (self.no_ai_temperature < self.optimal_temperature[0]) :
-            no_ai_energy = self.optimal_temperature[0] - self.no_ai_temperature
+        if (self.no_ai_temperature < self.optimal_temperature[0]) : # if temp is low
+            no_ai_energy = self.optimal_temperature[0] - self.no_ai_temperature # has to bring it up to min at least
             self.no_ai_temperature = self.optimal_temperature[0]
 
-        elif (self.no_ai_temperature > self.optimal_temperature[1]) :
-            no_ai_energy = self.no_ai_temperature - self.optimal_temperature[1]
+        elif (self.no_ai_temperature > self.optimal_temperature[1]) : # if temp is high
+            no_ai_energy = self.no_ai_temperature - self.optimal_temperature[1] # has to bring it down to max at least
             self.no_ai_temperature = self.optimal_temperature[1]
 
         self.reward = no_ai_energy - ai_energy
@@ -60,6 +60,18 @@ class Env:
         # scale the reward to stabilize DQN computation
         self.reward = self.reward * 1e-3
 
+        # get the next state
+        # update atmospheric temperature
+        self.atmospheric_temperature = self.monthly_atmospheric_temperatures[month]
+
+        # get the number of users
+        self.current_number_users += np.random.randint(-self.max_update_users, self.max_update_users)
+
+        if (self.current_number_users > self.max_number_users) :
+            self.current_number_users = self.max_number_users
+
+        elif (self.current_number_users < self.min_number_users):
+            self.current_number_users = self.min_number_users
 
 
 

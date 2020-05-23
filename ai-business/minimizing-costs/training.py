@@ -22,7 +22,7 @@ rn.seed(1234)
 epsilon = 0.3
 number_actions = 5
 direction_boundary = (number_actions -1) / 2
-number_epochs = 1000
+number_epochs = 100
 max_memory = 3000
 batch_size = 512
 temperature_step = 1.5
@@ -47,7 +47,7 @@ model = brain.model
 
 # 1 epoch = 5 months
 if (env.train) :
-    for epochs in range(1, number_actions) :
+    for epoch in range(1, number_actions) :
         total_reward = 0
         loss = 0.
         new_month = np.random.randint(0, 12)
@@ -91,4 +91,11 @@ if (env.train) :
             loss += model.train_on_batch(inputs, targets)
             timestep += 1
             current_state = next_state
+        print("\n")
+        print("Epoch: {:03d}/{:03d}".format(epoch, number_epochs))
+        print('Total Energy spent with an AI: {:.0f}'.format(env.ai_total_energy))
+        print("Total Energy spent without AI: {:.0f}".format(env.no_ai_total_energy))
+
+        # save model
+        model.save("model.h5")
 

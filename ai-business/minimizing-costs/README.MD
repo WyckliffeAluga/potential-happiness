@@ -1,0 +1,1 @@
+Build an AI to minimize energy consumption of a single server, and thanks to the object oriented structure of the implementation, the AI model will be applicable to any server of a same data center, thus minimizing the costs of the whole data center.

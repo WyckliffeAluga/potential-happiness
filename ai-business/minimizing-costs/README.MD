@@ -46,3 +46,10 @@ Assumption 1:
 The temperature of the server can be approximated through Multiple Linear
 Regression, by a linear function of the atmospheric temperature, the number of users and the
 rate of data transmission:
+
+Assumption 2: 
+
+The energy spent by a system ( AI or the server’s integrated cooling system)
+that changes the server’s temperature from Tt to Tt+1 within 1 unit of time (here 1 minute),
+can be approximated ag
+

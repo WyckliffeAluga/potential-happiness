@@ -154,10 +154,3 @@ class Env:
         current_state = np.matrix([scaled_ai_temperature, scaled_number_users, scaled_rate_data])
 
         return current_state, self.reward, self.game_over
-
-
-
-
-if __name__ == '__main__' :
-    e = Env()
-    print((e.monthly_atmospheric_temperatures))

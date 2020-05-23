@@ -146,6 +146,16 @@ class Env:
         self.game_over = 0
         self.train = 1
 
+    def observe(self) :
+
+        scaled_ai_temperature = (self.ai_temperature - self.min_temperature) / (self.max_temperatue - self.min_temperature)
+        scaled_number_users   = (self.current_number_users - self.min_number_users) / (self.max_number_users - self.min_number_users)
+        scaled_rate_data  = (self.current_rate_data - self.min_rate_data) / (self.max_rate_data - self.min_rate_data)
+        current_state = np.matrix([scaled_ai_temperature, scaled_number_users, scaled_rate_data])
+
+        return current_state, self.reward, self.game_over
+
+
 
 
 if __name__ == '__main__' :

@@ -38,3 +38,18 @@ Parameters
 
 • the maximum rate of data transmission that can go up or down per minute, which will be 10
 
+
+
+Variables:
+
+
+• the temperature of the server at any minute
+
+• the number of users in the server at any minute
+
+• the rate of data transmission at any minute
+
+• the energy spent by the AI onto the server (to cool it down or heat it up) at any minute
+
+• the energy spent by the server’s integrated cooling system that automatically brings the server’s temperature back to the optimal range whenever the server’s temperature goes outside this optimal range
+

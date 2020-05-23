@@ -53,3 +53,10 @@ Variables:
 
 • the energy spent by the server’s integrated cooling system that automatically brings the server’s temperature back to the optimal range whenever the server’s temperature goes outside this optimal range
 
+
+Assumption 1: 
+
+The temperature of the server can be approximated through Multiple Linear
+Regression, by a linear function of the atmospheric temperature, the number of users and the
+rate of data transmission:
+

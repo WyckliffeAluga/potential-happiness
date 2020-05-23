@@ -44,3 +44,15 @@ train = True
 env.train = train
 
 model = brain.model
+
+if (env.train) :
+    for epochs in range(1, number_actions) :
+        total_reward = 0
+        loss = 0
+        new_month = np.random.randint(0, 12)
+        env.reset(new_month=new_month)
+        game_over = False
+        current_state, _, _, = env.observe()
+
+        timestep = 0
+        while ((not game_over) and timestep < 5*30*24*60) :

@@ -34,3 +34,16 @@ class DQN:
         inputs = np.zeros((min(length_memory, batch_size), number_inputs))
         targets= np.zeros((min(length_memory, batch_size), number_outputs))
 
+        for i, idx in enumerate(np.random.randint(0, length_memory, size= min(length_memory, batch_size))) :
+            current_state, action, reward, next_state = self.memory[idx][[0]]
+            game_over = self.max_memory[idx][1]
+            inputs[i] = current_state
+            targets[i] = model.predict(current_state)[0]
+            Q_sa = np.max(model.predict(next_state)[0])
+
+            if game_over :
+                targets[i , action] = reward
+            else:
+                targets[i. action] = reward + self.discount * Q_sa
+
+

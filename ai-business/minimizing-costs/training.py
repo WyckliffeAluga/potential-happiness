@@ -48,11 +48,29 @@ model = brain.model
 if (env.train) :
     for epochs in range(1, number_actions) :
         total_reward = 0
-        loss = 0
+        loss = 0.
         new_month = np.random.randint(0, 12)
         env.reset(new_month=new_month)
         game_over = False
         current_state, _, _, = env.observe()
 
         timestep = 0
-        while ((not game_over) and timestep < 5*30*24*60) :
+        while ((not game_over) and timestep < 5 * 30 * 24 * 60) :
+            # play next action by exploration
+            if (np.random.rand() < epsilon) :
+                action = np.random.randint(0,number_actions)
+                if (action - direction_boundary < 0) : # cooling down the server
+                    direction = -1
+                else:
+                    direction = 1
+                ai_energy = abs(action - direction_boundary) * temperature_step
+            else:
+                q_values = model.predict(current_state)
+                action = np.argmax(q_values[0])
+                if (action - direction_boundary < 0) :
+                    direction = -1
+                else:
+                    direction = 1
+                ai_energy = abs(action - direction_boundary) * temperature_step
+
+

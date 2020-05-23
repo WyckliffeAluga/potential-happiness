@@ -20,7 +20,7 @@ os.environ['PYTHONHASHSEED'] = '0'
 np.random.seed(42)
 rn.seed(12345)
 
-# SETTING THE PARAMETERS
+# set the parameters
 epsilon = .3
 number_actions = 5
 direction_boundary = (number_actions - 1) / 2
@@ -42,7 +42,7 @@ dqn = q_learning.DQN(max_memory = max_memory, discount = 0.9)
 # chose the mode
 train = True
 
-# TRAINING THE AI
+# train the AI
 env.train = train
 model = brain.model
 early_stopping = True

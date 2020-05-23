@@ -115,7 +115,21 @@ class Env:
                 self.ai_temperature = self.optimal_temperature[1]
 
 
+        # update scores
 
+        # update total energy spent by the ai
+        self.ai_total_energy += ai_energy
+        # update total energy spent by server cooling systtem
+        self.no_ai_total_energy += no_ai_energy
+
+        # scale the next states for the neural network
+        scaled_ai_temperature = (self.ai_temperature - self.min_temperature) / (self.max_temperatue - self.min_temperature)
+        scaled_number_users   = (self.current_number_users - self.min_number_users) / (self.max_number_users - self.min_number_users)
+        scaled_rate_data  = (self.current_rate_data - self.min_rate_data) / (self.max_rate_data - self.min_rate_data)
+
+        next_state = np.matrix([scaled_ai_temperature, scaled_number_users, scaled_rate_data])
+
+        return next_state, self.reward, self.game_over
 
 if __name__ == '__main__' :
     e = Env()

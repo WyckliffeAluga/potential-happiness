@@ -89,4 +89,6 @@ if (env.train) :
 
             # computing the loss
             loss += model.train_on_batch(inputs, targets)
+            timestep += 1
+            current_state = next_state
 

@@ -38,3 +38,9 @@ dqn = q_learning.DQN(max_memory=max_memory, discount=0.9)
 
 # mode
 train = True
+
+
+# train the AI
+env.train = train
+
+model = brain.model

@@ -45,6 +45,7 @@ env.train = train
 
 model = brain.model
 
+# 1 epoch = 5 months
 if (env.train) :
     for epochs in range(1, number_actions) :
         total_reward = 0
@@ -55,6 +56,7 @@ if (env.train) :
         current_state, _, _, = env.observe()
 
         timestep = 0
+        # one time step is 1 minute
         while ((not game_over) and timestep < 5 * 30 * 24 * 60) :
             # play next action by exploration
             if (np.random.rand() < epsilon) :
@@ -73,4 +75,18 @@ if (env.train) :
                     direction = 1
                 ai_energy = abs(action - direction_boundary) * temperature_step
 
+            # update the environment
+            month = int(timestep/ (30*24*60))
+            next_state, reward, game_over = env.update(direction, ai_energy, month)
+            total_reward += reward
+
+            # store transitions
+            transition = [current_state, action, reward, next_state]
+            dqn.remember(transition, game_over)
+
+            # gather inputs and targets
+            inputs, targets = dqn.get_batch(model=model, batch_size=batch_size)
+
+            # computing the loss
+            loss += model.train_on_batch(inputs, targets)
 

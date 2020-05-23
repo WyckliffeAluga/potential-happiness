@@ -13,7 +13,16 @@ class DQN:
 
     def __init__(self, max_memory=100, discount=0.9) :
 
-        # memoery of experience replay
+        # memory of experience replay
         self.memory = list()
         self.max_memory = max_memory
         self.discount = discount
+
+    def remember(self, transition, game_over) :
+
+        self.memory.append([transition, game_over])
+
+        if (len(self.memory) > self.max_memory) :
+            del self.memory[0]
+
+    def

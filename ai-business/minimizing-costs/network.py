@@ -6,7 +6,6 @@ Created on Sat May 23 00:21:23 2020
 """
 
 
-import keras
 from keras.layers import Input, Dense
 from keras.models import Model
 from keras.optimizers import Adam
@@ -21,4 +20,6 @@ class Network:
         x = Dense(units=64, activation='sigmoid')(states)
         y = Dense(units=32, activation='sigmoid')(x)
         q_values = Dense(units=number_actions, activation='softmax')(y)
+        self.model = Model(states, q_values)
 
+        self.model.compile(loss='mse', optimizer=Adam(learning_rate=self.learning_rate))

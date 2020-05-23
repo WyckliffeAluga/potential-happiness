@@ -43,6 +43,23 @@ class Env:
         self.game_over = 0
         self.train = 1
 
+    def update(self, direction, ai_energy, month) :
+
+        # compute the energy spent by server's cooling system
+        no_ai_energy = 0
+        if (self.no_ai_temperature < self.optimal_temperature[0]) :
+            no_ai_energy = self.optimal_temperature[0] - self.no_ai_temperature
+            self.no_ai_temperature = self.optimal_temperature[0]
+
+        elif (self.no_ai_temperature > self.optimal_temperature[1]) :
+            no_ai_energy = self.no_ai_temperature - self.optimal_temperature[1]
+            self.no_ai_temperature = self.optimal_temperature[1]
+
+        self.reward = no_ai_energy - ai_energy
+
+        # scale the reward to stabilize DQN computation
+        self.reward = self.reward * 1e-3
+
 
 
 

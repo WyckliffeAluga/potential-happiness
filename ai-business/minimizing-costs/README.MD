@@ -53,3 +53,40 @@ The energy spent by a system ( AI or the server’s cooling system)
 that changes the server’s temperature from Tt to Tt+1 within 1 unit of time (here 1 minute),
 can be approximated ag
 
+
+Inputs
+
+
+1. The temperature of the server at time t.
+2. The number of users in the server at time t.
+3. The rate of data transmission in the server at time t.
+Thus the input state will be an input vector of these three elements.The AI will take this vector as
+input, and will return the action to play at each time t.
+
+
+Actions 
+
+
+0 
+
+The AI cools down the server by 3
+◦C
+
+1 
+
+The AI cools down the server by 1.5
+◦C
+
+2 
+
+The AI does not transfer any heat to the server (no temperature change)
+
+3 
+
+The AI heats up the server by 1.5
+◦C
+
+4 
+
+The AI heats up the server by 3
+◦C

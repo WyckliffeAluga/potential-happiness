@@ -54,6 +54,9 @@ if __name__ == '__main__' :
     c = Cancer()
 
     model = c.model()
+    prediction = model.predict(c.x_valid)
+    cm = confusion_matrix(c.y_valid, prediction)
+    sns.heatmap(cm, annot=True)
 
 
 

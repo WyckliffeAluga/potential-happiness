@@ -79,5 +79,5 @@ def best_route(starting_location, intermediary_location, ending_location):
 
 if __name__ == '__main__' :
 
-      route= best_route('A', 'H', 'D')
+      route= best_route('A', 'F', 'D')
       print(route)

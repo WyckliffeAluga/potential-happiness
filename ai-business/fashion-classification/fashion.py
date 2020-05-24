@@ -95,6 +95,7 @@ class Fashion :
           #      verbose=1, epochs=50, batch_size=512)
 
       #  model.save('model.h5')
+
     def random_test(self) :
 
         model = load_model('model.h5')

@@ -4,16 +4,12 @@ Created on Sat May 23 01:14:41 2020
 
 @author: wyckliffe
 """
-
-
 import os
 import numpy as np
 import random as rn
 import env
 import network
 import q_learning
-
-
 
 # Setting seeds for reproducibility
 os.environ['PYTHONHASHSEED'] = '0'
@@ -53,7 +49,6 @@ patience_count = 0
 if (env.train):
     # loop over all epochs (1 epoch = 5 months)
     for epoch in range(1, number_epochs):
-
         total_reward = 0
         loss = 0.
         new_month = np.random.randint(0, 12)
@@ -61,7 +56,6 @@ if (env.train):
         game_over = False
         current_state, _, _ = env.observe()
         timestep = 0
-
         # loop over all time steps( 1 timestep = 1 min)
         while ((not game_over) and timestep <= 5 * 30 * 24 * 60):
             # explore
@@ -115,6 +109,3 @@ if (env.train):
                 break
         # save the model
         model.save("model.h5")
-
-
-

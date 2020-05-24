@@ -30,8 +30,8 @@ strategies_selected_ts = [] # list of strategies selected by thombson sampling
 total_reward_rs = 0
 total_reward_ts = 0
 
-numbers_of_rewards_got_1 = [0] * d
-numbers_of_rewards_got_0 = [0] * d
+numbers_of_rewards_got_1 = [0] * D
+numbers_of_rewards_got_0 = [0] * D
 
 for n in range(N):
 
@@ -44,10 +44,17 @@ for n in range(N):
     # pick a strategy using Thompson sampling
     max_random = 0
     strategy_ts = 0
-    for d in range(D) :
+    for d in range(0, D) :
         random_beta = random.betavariate(numbers_of_rewards_got_1[d] +1, numbers_of_rewards_got_0[d] +1)
         if random_beta > max_random :
             max_random = random_beta
             strategy_ts = d
 
-    reward_ts = X[]
+    reward_ts = X[n, strategy_ts]
+    if reward_ts == 1:
+        numbers_of_rewards_got_1[strategy_ts] = numbers_of_rewards_got_1[strategy_ts] + 1
+    else:
+        numbers_of_rewards_got_0[strategy_ts] = numbers_of_rewards_got_0[strategy_ts] + 1
+
+    strategies_selected_ts.append(strategy_ts)
+    total_reward_ts += reward_ts

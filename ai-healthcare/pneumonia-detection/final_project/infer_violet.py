@@ -2,7 +2,7 @@
 """
 Created on Fri May 22 16:57:10 2020
 
-@author: wyckl
+@author: wyckliffe
 """
 
 
@@ -13,7 +13,7 @@ import pydicom
 import matplotlib.pyplot as plt
 import keras
 from keras.models import model_from_json
-from keras.applications.vgg16 import preprocess_input
+from skimage.transform import resize
 
 # This function reads in a .dcm file, checks the important fields for our device, and returns a numpy array
 # of just the imaging data
@@ -29,11 +29,11 @@ def check_dicom(filename):
 
 # This function takes the numpy array output by check_dicom and
 # runs the appropriate pre-processing needed for our model input
-def preprocess_image(img, image):
+def preprocess_image(img, img_size, img_size, img_size):
 
-    proc_img = img.reshape(image)
-    proc_img =preprocess_input(proc_img)
-
+    img = (img - img_mean)/img_std
+    img = resize(img, img_size)
+  
     return proc_img
 
 # This function loads in our trained model w/ weights and compiles it
@@ -72,6 +72,8 @@ for i in test_dicoms:
 
     img = np.array([])
     img = check_dicom(i)
+    img_mean = np.mean(img)
+    img_std  = np.std(img)
 
     if img is None:
         continue

@@ -38,14 +38,24 @@ class Cancer :
         sns.heatmap(self.cancer_df.corr() , annot = True)
 
     def model(self) :
+
         X = self.cancer_df.drop(['target'], axis=1)
         y = self.cancer_df['target']
 
-        x_train , self.x_valid , y_train, self.y_valid = train_test_split(X, y,
+        x_train , x_valid , y_train, self.y_valid = train_test_split(X, y,
                                                                  test_size = 0.2
                                                                  )
+        min_x_train = x_train.min()
+        range_x_train = (x_train - min_x_train).max()
+
+        x_train = (x_train - min_x_train) / range_x_train
         model = SVC()
         model.fit(x_train, y_train)
+
+        min_x_valid = x_valid.min()
+        range_x_valid = (x_valid - min_x_valid).max()
+
+        self.x_valid = (x_valid - min_x_valid) / range_x_valid
 
         return model
 
@@ -57,6 +67,8 @@ if __name__ == '__main__' :
     prediction = model.predict(c.x_valid)
     cm = confusion_matrix(c.y_valid, prediction)
     sns.heatmap(cm, annot=True)
+
+    print(classification_report(c.y_valid, prediction))
 
 
 

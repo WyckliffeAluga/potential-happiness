@@ -43,7 +43,7 @@ class Cancer :
         y = self.cancer_df['target']
 
         x_train , x_valid , y_train, self.y_valid = train_test_split(X, y,
-                                                                 test_size = 0.2,random_state=42)
+                                                                 test_size = 0.3 )
         min_x_train = x_train.min()
         range_x_train = (x_train - min_x_train).max()
 

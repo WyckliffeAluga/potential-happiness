@@ -10,7 +10,7 @@ import numpy as np
 import random
 import matplotlib.pyplot as plt
 
-N = 100000 # number of customers sampled
+N = 100000 # number of customers samples
 D = 9 # number of strategies
 
 # create simulations

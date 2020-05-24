@@ -11,7 +11,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 from sklearn.datasets import load_breast_cancer
-from sklearn.model_selection import train_test_split
+from sklearn.model_selection import train_test_split , GridSearchCV
 from sklearn.svm import SVC
 from sklearn.metrics import classification_report, confusion_matrix
 
@@ -43,21 +43,26 @@ class Cancer :
         y = self.cancer_df['target']
 
         x_train , x_valid , y_train, self.y_valid = train_test_split(X, y,
-                                                                 test_size = 0.2
-                                                                 )
+                                                                 test_size = 0.2,random_state=42)
         min_x_train = x_train.min()
         range_x_train = (x_train - min_x_train).max()
 
         x_train = (x_train - min_x_train) / range_x_train
-        model = SVC()
-        model.fit(x_train, y_train)
 
         min_x_valid = x_valid.min()
         range_x_valid = (x_valid - min_x_valid).max()
 
         self.x_valid = (x_valid - min_x_valid) / range_x_valid
 
-        return model
+        param_grid = {'C' : [0.1, 1, 10, 100],
+                  'gamma': [1 , 0.1, 0.01, 0.001],
+                  'kernel': ['rbf']}
+
+        grid = GridSearchCV(SVC(), param_grid, refit = True, verbose = 0)
+
+        grid.fit(x_train, y_train)
+
+        return grid
 
 
 if __name__ == '__main__' :
@@ -69,6 +74,11 @@ if __name__ == '__main__' :
     sns.heatmap(cm, annot=True)
 
     print(classification_report(c.y_valid, prediction))
+
+
+
+
+
 
 
 

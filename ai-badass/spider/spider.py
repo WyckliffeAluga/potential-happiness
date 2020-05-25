@@ -238,3 +238,38 @@ tau = 0.005 # Target network update rate
 policy_noise = 0.2
 noise_clip = 0.5
 policy_freq = 2
+
+
+# create a file name for the two saved models: the Actor and Critic models
+file_name = "%s_%s_%s" % ("Solution", env_name, str(seed))
+print ("---------------------------------------")
+print ("Settings: %s" % (file_name))
+print ("---------------------------------------")
+
+# create a folder inside which will be saved the trained models
+if not os.path.exists("./results"):
+  os.makedirs("./results")
+if save_models and not os.path.exists("./pytorch_models"):
+  os.makedirs("./pytorch_models")
+
+# instantiate the environment
+env = gym.make(env_name)
+
+# set the seeds
+env.seed(seed)
+torch.manual_seed(seed)
+np.random.seed(seed)
+
+# get the state dimensions, action dimensions and max actions
+state_dim = env.observation_space.shape[0]
+action_dim = env.action_space.shape[0]
+max_action = float(env.action_space.high[0])
+
+# create the policy network (the Actor model)
+policy = TD3(state_dim, action_dim, max_action)
+
+# create the Experience Replay memory
+replay_buffer = ReplayBuffer()
+
+# define a list where all the evaluation results over 10 episodes are stored
+evaluations = [evaluate_policy(policy, env)]

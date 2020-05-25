@@ -348,7 +348,7 @@ while total_timesteps < max_timesteps:
   total_timesteps += 1
   timesteps_since_eval += 1
 
-# add the last policy evaluation to our list of evaluations and save our model
+# add the last policy evaluation to the list of evaluations and save the model
 evaluations.append(evaluate_policy(policy , env))
 if save_models: policy.save("%s" % (file_name), directory="./pytorch_models")
 np.save("./results/%s" % (file_name), evaluations)

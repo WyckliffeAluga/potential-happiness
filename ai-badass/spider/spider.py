@@ -8,17 +8,14 @@ Created on Mon May 25 00:32:55 2020
 
 import os
 import time
-import random
 import numpy as np
-import matplotlib.pyplot as plt
 import pybullet_envs
 import gym
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from gym import wrappers
-from torch.autograd import Variable
-from collections import deque
+
 
 # select the device (CPU or GPU)
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -306,14 +303,14 @@ while total_timesteps < max_timesteps:
       print("Total Timesteps: {} Episode Num: {} Reward: {}".format(total_timesteps, episode_num, episode_reward))
       policy.train(replay_buffer, episode_timesteps, batch_size, discount, tau, policy_noise, noise_clip, policy_freq)
 
-    # We evaluate the episode and we save the policy
+    # evaluate the episode and save the policy
     if timesteps_since_eval >= eval_freq:
       timesteps_since_eval %= eval_freq
       evaluations.append(evaluate_policy(policy, env))
       policy.save(file_name, directory="./pytorch_models")
       np.save("./results/%s" % (file_name), evaluations)
 
-    # When the training step is done, we reset the state of the environment
+    # When the training step is done, reset the state of the environment
     obs = env.reset()
 
     # Set the Done to False
@@ -324,34 +321,34 @@ while total_timesteps < max_timesteps:
     episode_timesteps = 0
     episode_num += 1
 
-  # Before 10000 timesteps, we play random actions
+  # Before 10000 timesteps,  play random actions
   if total_timesteps < start_timesteps:
     action = env.action_space.sample()
-  else: # After 10000 timesteps, we switch to the model
+  else: # After 10000 timesteps, switch to the model
     action = policy.select_action(np.array(obs))
-    # If the explore_noise parameter is not 0, we add noise to the action and we clip it
+    # If the explore_noise parameter is not 0,  add noise to the action and we clip it
     if expl_noise != 0:
       action = (action + np.random.normal(0, expl_noise, size=env.action_space.shape[0])).clip(env.action_space.low, env.action_space.high)
 
   # The agent performs the action in the environment, then reaches the next state and receives the reward
   new_obs, reward, done, _ = env.step(action)
 
-  # We check if the episode is done
+  # check if the episode is done
   done_bool = 0 if episode_timesteps + 1 == env._max_episode_steps else float(done)
 
-  # We increase the total reward
+  # increase the total reward
   episode_reward += reward
 
-  # We store the new transition into the Experience Replay memory (ReplayBuffer)
+  # store the new transition into the Experience Replay memory (ReplayBuffer)
   replay_buffer.add((obs, new_obs, action, reward, done_bool))
 
-  # We update the state, the episode timestep, the total timesteps, and the timesteps since the evaluation of the policy
+  #  update the state, the episode timestep, the total timesteps, and the timesteps since the evaluation of the policy
   obs = new_obs
   episode_timesteps += 1
   total_timesteps += 1
   timesteps_since_eval += 1
 
-# add the last policy evaluation to our list of evaluations and we save our model
+# add the last policy evaluation to our list of evaluations and save our model
 evaluations.append(evaluate_policy(policy , env))
 if save_models: policy.save("%s" % (file_name), directory="./pytorch_models")
 np.save("./results/%s" % (file_name), evaluations)

@@ -129,10 +129,10 @@ class TD3:
     self.max_action = max_action
 
   def get_action(self, state):
-    state = torch.Tensor(state.reshape(1,-1)).to(device)
+    state = torch.FloatTensor(state.reshape(1,-1)).to(device)
     return self.actor_model(state).cpu().data.numpy().flatten()
 
-  def train(self, replay_buffer, iterations, batch_size, dicount=0.99, tau=0.005, policy_noise=0.2, noise_clip=0.5, policy_freq=2) :
+  def train(self, replay_buffer, iterations, batch_size, discount=0.99, tau=0.005, policy_noise=0.2, noise_clip=0.5, policy_freq=2) :
 
     for it in range(iterations):
 
@@ -143,3 +143,47 @@ class TD3:
       actions = torch.Tensor(actions).to(device)
       rewards = torch.Tensor(rewards).to(device)
       dones = torch.Tensor(dones).to(device)
+
+      # get next action
+      next_actions = self.actor_target.forward(next_states)
+
+      # add gaussian noise to next actions
+      noises = torch.Tensor(actions).data.normal_(0, policy_noise).to(device)
+      noises = noises.clamp(-noise_clip, noise_clip)
+      next_actions = (next_actions + noises).clamp(-self.max_action, self.max_action)
+
+      # get critic targets
+      tq1, tq2 = self.critic_target.forward(next_states, next_actions)
+
+      # get the min of q1 and q2
+      approx_q = torch.min(tq1, tq2)
+
+      # get max Qt
+      Qt = rewards + ((1 - dones)*discount * approx_q ).detach()
+
+      # get Q from critc models
+      q1, q2 = self.critic_model.forward(states, actions)
+
+      # incur the loss
+      loss = nn.MSELoss(q1, Qt) + nn.MSELoss(q2, Qt)
+
+      # back propagation
+      self.critic_optimizer.zero_grad()
+      loss.backward()
+      self.critic_optimizer.step()
+
+      # update actor model by performing gradient ascent
+      # delay by policy frequency
+      if it % policy_freq == 0 :
+        actor_loss = self.critic_model.Q(states, self.actor_model(states)).mean()
+        self.actor_optimizer.zero_grad()
+        actor_loss.backward()
+        self.actor_optimizer.step()
+
+        # update the weights of the actor models
+        for actor_param, target_param in zip(self.actor_model.parameters(), self.actor_target.parameters()) :
+          target_param.data.copy_(tau * actor_param.data + (1 - tau)*target_param.data)
+
+        # update the weights of the critic models
+        for critic_param, target_param in zip(self.critic_model.parameters(), self.critic_target.parameters()) :
+          target_param.data.copy_(tau * critic_param.data + (1 - tau)*target_param.data)

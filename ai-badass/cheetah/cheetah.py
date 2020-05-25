@@ -132,3 +132,14 @@ class TD3:
     state = torch.Tensor(state.reshape(1,-1)).to(device)
     return self.actor_model(state).cpu().data.numpy().flatten()
 
+  def train(self, replay_buffer, iterations, batch_size, dicount=0.99, tau=0.005, policy_noise=0.2, noise_clip=0.5, policy_freq=2) :
+
+    for it in range(iterations):
+
+      # sample a batch of transitions from the memory
+      states, next_states, actions, rewards, dones = replay_buffer.sample(batch_size)
+      states = torch.Tensor(states).to(device)
+      next_states = torch.Tensor(next_states).to(device)
+      actions = torch.Tensor(actions).to(device)
+      rewards = torch.Tensor(rewards).to(device)
+      dones = torch.Tensor(dones).to(device)

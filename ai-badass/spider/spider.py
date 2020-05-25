@@ -20,6 +20,8 @@ from gym import wrappers
 from torch.autograd import Variable
 from collections import deque
 
+# select the device (CPU or GPU)
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 # Experience replay
 
@@ -115,3 +117,92 @@ class Critic(nn.Module):
     x1 = F.relu(self.layer_2(x1))
     x1 = self.layer_3(x1)
     return x1
+
+
+class TD3:
+
+  def __init__(self, state_dim, action_dim, max_action):
+
+    self.actor = Actor(state_dim, action_dim, max_action).to(device)
+    self.actor_target = Actor(state_dim, action_dim, max_action).to(device)
+    self.actor_target.load_state_dict(self.actor.state_dict())
+    self.actor_optimizer = torch.optim.Adam(self.actor.parameters())
+
+    self.critic = Critic(state_dim, action_dim).to(device)
+    self.critic_target = Critic(state_dim, action_dim).to(device)
+    self.critic_target.load_state_dict(self.critic.state_dict())
+    self.critic_optimizer = torch.optim.Adam(self.critic.parameters())
+
+    self.max_action = max_action
+
+  def select_action(self, state):
+
+    state = torch.Tensor(state.reshape(1, -1)).to(device)
+    return self.actor(state).cpu().data.numpy().flatten()
+
+  def train(self, replay_buffer, iterations, batch_size=100, discount=0.99, tau=0.005, policy_noise=0.2, noise_clip=0.5, policy_freq=2):
+
+    for it in range(iterations):
+
+      # sample batches from replay buffer
+      batch_states, batch_next_states, batch_actions, batch_rewards, batch_dones = replay_buffer.sample(batch_size)
+      state = torch.Tensor(batch_states).to(device)
+      next_state = torch.Tensor(batch_next_states).to(device)
+      action = torch.Tensor(batch_actions).to(device)
+      reward = torch.Tensor(batch_rewards).to(device)
+      done = torch.Tensor(batch_dones).to(device)
+
+      # play an actor target from next states and for a'
+      next_action = self.actor_target(next_state)
+
+      # add gaussian noise on the actions
+      noise = torch.Tensor(batch_actions).data.normal_(0, policy_noise).to(device)
+      noise = noise.clamp(-noise_clip, noise_clip)
+      next_action = (next_action + noise).clamp(-self.max_action, self.max_action)
+
+      # get targes q's
+      tq1, tq2 = self.critic_target(next_state, next_action)
+
+      # get min (q1, q2)
+      q = torch.min(tq1, tq2)
+
+      # compute Qt
+      Qt = reward + ((1 - done) * discount * q).detach()
+
+      # get q1 or q2
+      q1, q2 = self.critic(state, action)
+
+      # compute loss
+      loss = F.mse_loss(q1, Qt) + F.mse_loss(q2, Qt)
+
+      # back propagate
+      self.critic_optimizer.zero_grad()
+      loss.backward()
+      self.critic_optimizer.step()
+
+      # update optimizers with delay
+      if it % policy_freq == 0:
+
+        actor_loss = -self.critic.Q1(state, self.actor(state)).mean()
+        self.actor_optimizer.zero_grad()
+        actor_loss.backward()
+        self.actor_optimizer.step()
+
+        # update weights of the actor target
+        for param, target_param in zip(self.actor.parameters(), self.actor_target.parameters()):
+          target_param.data.copy_(tau * param.data + (1 - tau) * target_param.data)
+
+        # update weights of the critic target
+        for param, target_param in zip(self.critic.parameters(), self.critic_target.parameters()):
+          target_param.data.copy_(tau * param.data + (1 - tau) * target_param.data)
+
+  # Making a save method to save a trained model
+  def save(self, filename, directory):
+    torch.save(self.actor.state_dict(), '%s/%s_actor.pth' % (directory, filename))
+    torch.save(self.critic.state_dict(), '%s/%s_critic.pth' % (directory, filename))
+
+  # Making a load method to load a pre-trained model
+  def load(self, filename, directory):
+    self.actor.load_state_dict(torch.load('%s/%s_actor.pth' % (directory, filename)))
+    self.critic.load_state_dict(torch.load('%s/%s_critic.pth' % (directory, filename)))
+

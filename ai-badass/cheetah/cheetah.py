@@ -105,3 +105,25 @@ class Critic(nn.Module) :
     x1 = self.layer_3(x1)
 
     return x1
+
+
+# select the device
+device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+
+# build the training process
+
+class TD3:
+
+  def __init__(self, state_dim, action_dim, max_action) :
+
+    self.actor_model  = Actor(state_dim, action_dim, max_action).to(device)
+    self.actor_target = Actor(state_dim, action_dim, max_action).to(device)
+    self.actor_target.load_state_dict(self.actor_model.load_state_dict())
+    self.actor_optimizer = torch.optim.Adam(self.actor_model.parameters)
+
+    self.critic_model  = Critic(state_dim, action_dim).to(device)
+    self.critic_target = Critic(state_dim, action_dim).to(device)
+    self.critic_target.load_state_dict(self.critic_model.load_state_dict())
+    self.critic_optimizer = torch.optim.Adam(self.critic_model.parameters)
+
+    self.max_action = max_action

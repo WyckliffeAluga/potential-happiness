@@ -223,3 +223,18 @@ def evaluate_policy(policy, env, eval_episodes=10):
   print ("Average Reward over the Evaluation Step: %f" % (avg_reward))
   print ("---------------------------------------")
   return avg_reward
+
+# set the parameters
+env_name = "AntBulletEnv-v0"
+seed = 0
+start_timesteps = 1e4 # number of iterations before start learning (at this time do random actions)
+eval_freq = 5e3 # how often to evaluate
+max_timesteps = 5e5 # Total number of iterations/timesteps
+save_models = True
+expl_noise = 0.1 # Exploration noise
+batch_size = 100 # Size of the batch
+discount = 0.99 # Discount factor gamma
+tau = 0.005 # Target network update rate
+policy_noise = 0.2
+noise_clip = 0.5
+policy_freq = 2

@@ -196,12 +196,12 @@ class TD3:
         for param, target_param in zip(self.critic.parameters(), self.critic_target.parameters()):
           target_param.data.copy_(tau * param.data + (1 - tau) * target_param.data)
 
-  # Making a save method to save a trained model
+  # save trained model
   def save(self, filename, directory):
     torch.save(self.actor.state_dict(), '%s/%s_actor.pth' % (directory, filename))
     torch.save(self.critic.state_dict(), '%s/%s_critic.pth' % (directory, filename))
 
-  # Making a load method to load a pre-trained model
+  # load function to load saved model
   def load(self, filename, directory):
     self.actor.load_state_dict(torch.load('%s/%s_actor.pth' % (directory, filename)))
     self.critic.load_state_dict(torch.load('%s/%s_critic.pth' % (directory, filename)))

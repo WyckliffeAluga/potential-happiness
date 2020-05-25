@@ -6,3 +6,52 @@ Created on Mon May 25 00:32:55 2020
 """
 
 
+import os
+import time
+import random
+import numpy as np
+import matplotlib.pyplot as plt
+import pybullet_envs
+import gym
+import torch
+import torch.nn as nn
+import torch.nn.functional as F
+from gym import wrappers
+from torch.autograd import Variable
+from collections import deque
+
+
+# Experience replay
+
+class ReplayBuffer:
+
+  def __init__(self, max_size=1e6):
+
+    self.memory = []
+    self.max_size = max_size
+    self.index = 0
+
+  def add(self, transition):
+
+    if len(self.memory) == self.max_size:
+      self.memory[int(self.index)] = transition
+      self.index = (self.index + 1) % self.max_size
+    else:
+      self.memory.append(transition)
+
+  def sample(self, batch_size):
+
+    indexes = np.random.randint(0, len(self.memory), size=batch_size)
+
+    batch_states, batch_next_states, batch_actions, batch_rewards, batch_dones = [], [], [], [], []
+
+    for i in indexes:
+
+      state, next_state, action, reward, done = self.memory[i]
+      batch_states.append(np.array(state, copy=False))
+      batch_next_states.append(np.array(next_state, copy=False))
+      batch_actions.append(np.array(action, copy=False))
+      batch_rewards.append(np.array(reward, copy=False))
+      batch_dones.append(np.array(done, copy=False))
+
+    return np.array(batch_states), np.array(batch_next_states), np.array(batch_actions), np.array(batch_rewards).reshape(-1, 1), np.array(batch_dones).reshape(-1, 1)

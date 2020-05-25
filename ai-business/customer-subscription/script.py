@@ -11,5 +11,10 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from dateutil import parser
 
-
+# load dataset
 data = pd.read_csv('appdata10.csv')
+
+# clean the hour column
+data['hour'] = data.hour.str.slice(1,3).astype(int)
+
+#

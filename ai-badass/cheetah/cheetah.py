@@ -13,6 +13,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pybullet_envs
 import gym
+import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from gym import wrappers
@@ -47,3 +48,21 @@ class ReplayBuffer :
       dones_batch.append(np.array(done, copy=False))
 
     return np.array(states_batch), np.array(next_states_batch), np.array(actions_batch), np.array(rewards_batch).reshape[-1,1], np.array(dones_batch).reshape(-1,1)
+
+
+class Actor(nn.Module):
+
+  def __init__(self, state_dim, action_dim, max_action):
+
+    super(Actor, self).__init__()
+    self.layer_1 = nn.Linear(state_dim, 400, bias=False)
+    self.layer_2 = nn.Linear(400, 300, bias=False)
+    self.layer_3 = nn.Linear(300, action_dim)
+    self.max_action = max_action
+
+  def forward(self, x) :
+
+    x = F.relu(self.layer_1(x))
+    x = F.relu(self.layer_2(x))
+    x = torch.tanh(self.later_3(x)) * self.max_action
+    return x

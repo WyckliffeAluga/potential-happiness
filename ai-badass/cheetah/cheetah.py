@@ -127,3 +127,8 @@ class TD3:
     self.critic_optimizer = torch.optim.Adam(self.critic_model.parameters)
 
     self.max_action = max_action
+
+  def get_action(self, state):
+    state = torch.Tensor(state.reshape(1,-1)).to(device)
+    return self.actor_model(state).cpu().data.numpy().flatten()
+

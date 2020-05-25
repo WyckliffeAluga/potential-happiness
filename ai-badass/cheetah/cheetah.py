@@ -97,4 +97,11 @@ class Critic(nn.Module) :
 
     return x1, x2
 
+  def Q(self, x, u) :
 
+    xu = torch.cat([x, u], 1)
+    x1 = F.relu(self.layer_1(xu))
+    x1 = F.relu(self.layer_2(x1))
+    x1 = self.layer_3(x1)
+
+    return x1

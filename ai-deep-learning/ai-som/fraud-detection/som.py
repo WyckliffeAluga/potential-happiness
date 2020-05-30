@@ -5,29 +5,23 @@ Created on Fri May 29 20:34:03 2020
 @author: wyckliffe
 """
 
-
-# Importing the libraries
 import numpy as np
 import pandas as pd
-
-# Importing the dataset
+from pylab import bone, pcolor, colorbar, plot, show
+from sklearn.preprocessing import MinMaxScaler
+from minisom import MiniSom
+#import the dataset
 dataset = pd.read_csv('Credit_Card_Applications.csv')
 X = dataset.iloc[:, :-1].values
 y = dataset.iloc[:, -1].values
-
-# Feature Scaling
-from sklearn.preprocessing import MinMaxScaler
+# standardize the training dataset
 sc = MinMaxScaler(feature_range = (0, 1))
 X = sc.fit_transform(X)
-
-# Training the SOM
-from minisom import MiniSom
+# train the SOM
 som = MiniSom(x = 10, y = 10, input_len = 15, sigma = 1.0, learning_rate = 0.5)
 som.random_weights_init(X)
 som.train_random(data = X, num_iteration = 100)
-
-# Visualizing the results
-from pylab import bone, pcolor, colorbar, plot, show
+# visualize
 bone()
 pcolor(som.distance_map().T)
 colorbar()
@@ -43,8 +37,7 @@ for i, x in enumerate(X):
          markersize = 10,
          markeredgewidth = 2)
 show()
-
-# Finding the frauds
+# find the frauds
 mappings = som.win_map(X)
 frauds = np.concatenate((mappings[(5,1)], mappings[(5,2)]), axis = 0)
 frauds = sc.inverse_transform(frauds)

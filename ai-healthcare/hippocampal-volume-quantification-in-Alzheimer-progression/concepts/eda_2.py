@@ -59,7 +59,7 @@ img_crop = image[110:400, :]
 plt.imshow(img_crop, cmap=cm.Greys_r)
 
 # visualize the histogram
-p = img_crop.ravel()
+p = img_crop.flatten()
 vals, bins , ignored = plt.hist(p, bins = 200)
 plt.show()
 
@@ -86,7 +86,7 @@ plt.imshow(img_crop[15:60, 380:430], cmap="gray")
 masked = ma.masked_outside(img_crop, min_, max_)
 np.sort(np.unique(img_crop[~masked.mask]))
 
-_ = plt.hist(masked.ravel(), bins=15)
+_ = plt.hist(masked.flatten(), bins=15)
 plt.show()
 
 print(f"range: {img_crop.max()-img_crop.min()}")

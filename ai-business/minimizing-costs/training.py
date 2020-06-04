@@ -11,7 +11,6 @@ import env
 import network
 import q_learning
 
-# Setting seeds for reproducibility
 os.environ['PYTHONHASHSEED'] = '0'
 np.random.seed(42)
 rn.seed(12345)

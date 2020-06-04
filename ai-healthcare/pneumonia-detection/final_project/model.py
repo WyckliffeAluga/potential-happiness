@@ -11,11 +11,9 @@ from keras.preprocessing.image import ImageDataGenerator
 from keras.layers import  Dense, Flatten, Dropout
 from keras.models import Sequential, Model
 from keras.applications.vgg16 import VGG16
-from keras.optimizers import RMSprop
 from keras.callbacks import ModelCheckpoint, LearningRateScheduler
-from sklearn.metrics import roc_curve, auc, precision_recall_curve, average_precision_score, plot_precision_recall_curve, f1_score, confusion_matrix, accuracy_score
+from sklearn.metrics import roc_curve, auc, average_precision_score, f1_score, precision_recall_curve
 
-"""## Do some early processing of your metadata for easier model training:"""
 
 ## Load the NIH data to all_xray_df
 all_xray_df = pd.read_csv('/data/Data_Entry_2017.csv')
@@ -199,8 +197,6 @@ pred_Y = model.predict(valX, batch_size = 32, verbose = True)
 
 def plot_auc(t_y, p_y):
 
-    ## Hint: can use scikit-learn's built in functions here like roc_curve
-
     fpr, tpr, threshold = roc_curve(valY, pred_Y)
     roc_auc = auc(fpr, tpr)
 
@@ -248,8 +244,8 @@ plot_prec_rec(valY, pred_Y)
 plot_history(history)
 
 
-## Find the threshold that optimize your model's performance,
-## and use that threshold to make binary classification. Make sure you take all your metrics into consideration.
+## Find the threshold that optimize model's performance,
+## and use that threshold to make binary classification.
 from sklearn.metrics import recall_score, precision_score
 def optimize_f1(t_y, p_y):
     best_threshold = None
@@ -282,7 +278,6 @@ print("Threshold of %.2f gives recall score of %.4f"%(best_threshold, recall))
 precision = precision_score(valY, y_pred, average='micro')
 print("Threshold of %.2f gives a precision score %.4f"%(best_threshold, precision))
 
-## Let's look at some examples of true vs. predicted with our best model:
 
 YOUR_THRESHOLD = best_threshold
 fig, m_axs = plt.subplots(8, 8, figsize = (16, 16))
@@ -302,7 +297,7 @@ for (c_x, c_y, c_ax) in zip(valX[0:64], valY[0:64], m_axs.flatten()):
     c_ax.axis('off')
     i=i+1
 
-## Just save model architecture to a .json:
+## save model architecture to a .json:
 
 model_json = model.to_json()
 with open("my_model.json", "w") as json_file:

@@ -4,8 +4,6 @@ Created on Fri May 29 23:11:01 2020
 
 @author: wyckliffe
 """
-
-
 import numpy as np
 import pandas as pd
 import torch
@@ -15,12 +13,10 @@ import torch.optim as optim
 import torch.utils.data
 from torch.autograd import  Variable
 
-
 # import data set
 movies = pd.read_csv('ml-1m/movies.dat', sep='::', header=None, engine='python', encoding='latin-1')
 users = pd.read_csv('ml-1m/users.dat', sep='::', header=None, engine='python', encoding='latin-1')
 ratings = pd.read_csv('ml-1m/ratings.dat', sep='::', header=None, engine='python', encoding='latin-1')
-
 
 # prepare training and testing sets
 training_set = pd.read_csv('ml-100k/u1.base', delimiter = '\t')

@@ -70,36 +70,4 @@ class Keywords() :
         best_keywords = pd.DataFrame(best_keywords, columns=['Keyword', 'c_value'])
         
         return best_keywords
-    
-    
-
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
         

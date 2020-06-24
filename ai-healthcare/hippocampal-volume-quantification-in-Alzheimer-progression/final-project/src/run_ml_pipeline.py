@@ -23,41 +23,42 @@ class Config:
 if __name__ == "__main__":
     # Get configuration
 
-    # TASK: Fill in parameters of the Config class and specify directory where the data is stored and 
+    # TASK: Fill in parameters of the Config class and specify directory where the data is stored and
     # directory where results will go
     c = Config()
 
     # Load data
     print("Loading data...")
 
-    # TASK: LoadHippocampusData is not complete. Go to the implementation and complete it. 
+    # TASK: LoadHippocampusData is not complete. Go to the implementation and complete it.
     data = LoadHippocampusData(c.root_dir, y_shape = c.patch_size, z_shape = c.patch_size)
 
 
     # Create test-train-val split
-    # In a real world scenario you would probably do multiple splits for 
+    # In a real world scenario you would probably do multiple splits for
     # multi-fold training to improve your model quality
 
     keys = range(len(data))
 
-    # Here, random permutation of keys array would be useful in case if we do something like 
-    # a k-fold training and combining the results. 
+    # Here, random permutation of keys array would be useful in case if we do something like
+    # a k-fold training and combining the results.
 
     split = dict()
 
     # TASK: create three keys in the dictionary: "train", "val" and "test". In each key, store
-    # the array with indices of training volumes to be used for training, validation 
+    # the array with indices of training volumes to be used for training, validation
     # and testing respectively.
-    # <YOUR CODE GOES HERE>
+    split['train'], split['test'] = train_test_split(keys, test_size=0.25, random_state=50)
+    split['train'], split['val'] = train_test_split(split['train'], test_size=0.25, random_state=50 )
 
     # Set up and run experiment
-    
+
     # TASK: Class UNetExperiment has missing pieces. Go to the file and fill them in
     exp = UNetExperiment(c, split, data)
 
     # You could free up memory by deleting the dataset
     # as it has been copied into loaders
-    # del dataset 
+    # del dataset
 
     # run training
     exp.run()

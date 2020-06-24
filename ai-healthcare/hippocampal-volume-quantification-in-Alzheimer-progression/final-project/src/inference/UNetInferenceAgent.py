@@ -37,7 +37,7 @@ class UNetInferenceAgent:
         Returns:
             3D NumPy array with prediction mask
         """
-        
+
         raise NotImplementedError
 
     def single_volume_inference(self, volume):
@@ -55,10 +55,19 @@ class UNetInferenceAgent:
         # Assuming volume is a numpy array of shape [X,Y,Z] and we need to slice X axis
         slices = []
 
-        # TASK: Write code that will create mask for each slice across the X (0th) dimension. After 
-        # that, put all slices into a 3D Numpy array. You can verify if your method is 
-        # correct by running it on one of the volumes in your training set and comparing 
+        # TASK: Write code that will create mask for each slice across the X (0th) dimension. After
+        # that, put all slices into a 3D Numpy array. You can verify if your method is
+        # correct by running it on one of the volumes in your training set and comparing
         # with the label in 3D Slicer.
-        # <YOUR CODE HERE>
 
-        return # 
+        slices = np.zeros(volume.shape)
+        for slice_idx in range(volume.shape[0]):
+            slc = volume[slice_idx,:,:]
+            slc = slc.astype(np.single)
+            slc = slc / 255.0
+            slc_tensor = torch.from_numpy(slice0_norm).unsqueeze(0).unsqueeze(0)
+            pred = self.model(slc_tensor.to(self.device))
+            pred =  np.squeeze(pred.cpu().detach())
+            slices[slice_idx,:,:] = torch.argmax(pred, dim=0)
+
+        return slices

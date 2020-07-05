@@ -27,7 +27,7 @@ if __name__ == '__main__':
      # get the negative grid because since we are trying to find the best route and also
      # if we do not penalize we may just spend the rest of the time at one spot
      # grid = standard_grid()
-      grid = negative_grid(step_cost=-.1)
+      grid = negative_grid(step_cost=-1)
 
       # print rewards
       print("rewards:")

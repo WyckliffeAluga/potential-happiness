@@ -76,8 +76,8 @@ def get_Q(model, s):
 
 if __name__ == '__main__':
 
-  # grid = standard_grid()
-  grid = negative_grid(step_cost=-0.1)
+  grid = standard_grid()
+  #grid = negative_grid(step_cost=-0.1)
 
   # print rewards
   print("rewards:")

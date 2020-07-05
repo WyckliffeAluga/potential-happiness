@@ -5,9 +5,9 @@ Created on Fri May 22 22:32:28 202
 """
 import numpy as  np
 
-# built the enviroment
+# build the enviroment
 class Env:
-    # initialize the environme nt
+    # initialize the environment
     def __init__(self, optimal_temperature = (18.0, 24.0), initial_month = 0, initial_number_users = 10, initial_rate_data = 60):
         self.monthly_atmospheric_temperatures = [1.0, 5.0, 7.0, 10.0, 11.0, 20.0, 23.0, 24.0, 22.0, 10.0, 5.0, 1.0]
         self.initial_month = initial_month
@@ -111,7 +111,6 @@ class Env:
 
         return next_state, self.reward, self.game_over
 
-    # reset the environmrnt
     def reset(self, new_month):
 
         self.atmospheric_temperature = self.monthly_atmospheric_temperatures[new_month]

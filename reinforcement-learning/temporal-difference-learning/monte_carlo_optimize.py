@@ -25,12 +25,12 @@ def play_game(grid, policy):
 
   # each triple is s(t), a(t), r(t)
   # but r(t) results from taking action a(t-1) from s(t-1) and landing in s(t)
-  
+
   states_actions_rewards = [(s, a, 0)]
   seen_states = set()
   seen_states.add(grid.current_state())
   num_steps = 0
-  
+
   while True:
     r = grid.move(a)
     num_steps += 1
@@ -84,10 +84,10 @@ def max_dict(d):
 
 
 if __name__ == '__main__':
-  # use the standard grid again 
+  # use the standard grid again
   grid = standard_grid()
-  
-  #grid = negative_grid(step_cost=-10)
+
+  #grid = negative_grid(step_cost=-.5)
 
   # print rewards
   print("rewards:")
@@ -119,7 +119,7 @@ if __name__ == '__main__':
     if t % 100 == 0:
       print(t)
 
-    # generate an episode using 
+    # generate an episode using
     biggest_change = 0
     states_actions_returns = play_game(grid, policy)
     seen_state_action_pairs = set()

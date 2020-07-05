@@ -24,8 +24,8 @@ all_actions = ('U', 'D' , 'L', 'R')
 
 if __name__ == '__main__':
 
-  # grid = standard_grid()
-  grid = negative_grid(step_cost=-0.1)
+  #grid = standard_grid()
+  grid = negative_grid(step_cost=-10)
 
   # print rewards
   print("rewards:")

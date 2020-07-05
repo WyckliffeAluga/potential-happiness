@@ -69,8 +69,8 @@ class Stat :
         self.values.append(value)
         if len(self.values) % self.update_frequency == 0:
             mean_value = mean(self.values)
-            print(f"{self.ylabel}: min {min(self.values)}, avg: {mean_value}, max: {max(self.values)}")
-            print(f"metric: {self.ylabel}, value: {mean_value} ")
+            print(f"{self.y_label}: min {min(self.values)}, avg: {mean_value}, max: {max(self.values)}")
+            print(f"metric: {self.y_label}, value: {mean_value} ")
             self._save_csv(self.directory_path + self.y_label + ".csv", mean_value)
             self._save_png(input_path=self.directory_path + self.y_label + ".csv",
                            output_path=self.directory_path + self.y_label + ".png",

@@ -3,9 +3,11 @@
 # Importing the libraries
 
 import numpy as np
-import tensorflow as tf
+import tensorflow.compat.v1 as tf
 import json
 import os
+
+tf.disable_v2_behavior()
 
 # Building the CNN-VAE model within a class
 

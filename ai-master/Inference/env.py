@@ -3,7 +3,10 @@
 # Importing the libraries
 
 import numpy as np
-from scipy.misc import imresize as resize
+#from scipy.misc import imresize as resize
+#import skimage.transform.resize as resize
+from skimage.transform import resize
+
 from gym.spaces.box import Box
 from gym.envs.box2d.car_racing import CarRacing
 
@@ -88,7 +91,7 @@ def game_runner():
       steps += 1
       env.render()
       if restart: break
-  env.monitor.close()
+  env.env.close()
 
 if __name__=="__main__":
 	game_runner()

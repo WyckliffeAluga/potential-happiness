@@ -11,7 +11,7 @@ import numpy as np
 import plotly.express as px
 import seaborn as sns
 import matplotlib.pyplot as plt
-import plotly.graph_objects as go
+
 
 st.title('Iris')
 df = pd.read_csv("iris.csv")
